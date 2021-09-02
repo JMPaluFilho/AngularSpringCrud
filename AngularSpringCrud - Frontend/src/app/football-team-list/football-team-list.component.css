@@ -1,0 +1,10 @@
+.btnProperties {
+    margin: 5px;
+    width: 80px;
+    height: 38px;
+}
+
+.alignProperties {
+    vertical-align: middle;
+    text-align: center;
+}

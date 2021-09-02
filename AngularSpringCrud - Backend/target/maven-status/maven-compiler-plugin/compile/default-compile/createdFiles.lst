@@ -1,0 +1,8 @@
+br\com\angularspringcrud\model\FootballTeam.class
+br\com\angularspringcrud\repository\FootballTeamRepository.class
+br\com\angularspringcrud\controller\FootballTeamController.class
+br\com\angularspringcrud\exception\ResourceNotFoundException.class
+br\com\angularspringcrud\service\FootballTeamService.class
+br\com\angularspringcrud\configuration\PersistenceJPAConfiguration.class
+br\com\angularspringcrud\service\FootballTeamServiceImpl.class
+br\com\angularspringcrud\AngularSpringCrudApplication.class

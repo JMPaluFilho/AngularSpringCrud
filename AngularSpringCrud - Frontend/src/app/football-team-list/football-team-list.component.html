@@ -1,0 +1,56 @@
+<table class="table table-striped alignProperties">
+    <thead>
+        <tr>
+            <th style="width: 20%;">Footbal Team Name</th>
+            <th style="width: 20%;">Team Stadium</th>
+            <th style="width: 15%;">Team Foundation</th>
+            <th style="width: 20%;">Team Supporters</th>
+            <th style="width: 25%;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let team of teams">
+            <td>{{ team.teamName }}</td>
+            <td>{{ team.teamStadium }}</td>
+            <td>{{ team.teamFoundation | date:'dd/MM/yyyy' }}</td>
+            <td>{{ team.teamSupporters | number:'1.0-0' }}</td>
+            <td>
+                <button type="button" (click)="viewFootballTeam(team.teamId, viewModal)"
+                    class="btn btn-outline-info btnProperties">View</button>
+                <button type="button" (click)="updateFootballTeam(team.teamId)"
+                    class="btn btn-outline-primary btnProperties">Update</button>
+                <button type="button" (click)="deleteFootballTeam(team.teamId)"
+                    class="btn btn-danger btnProperties">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<ng-template #viewModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" style="text-align: center">View Details</h4>
+    </div>
+
+    <div class="modal-body">
+
+        <div>
+            <label><b> Football Team Name: </b></label> {{ team.teamName }}
+        </div>
+
+        <div>
+            <label><b> Team Stadium: </b></label> {{ team.teamStadium }}
+        </div>
+
+        <div>
+            <label><b> Team Foundation: </b></label> {{ team.teamFoundation | date:'dd/MM/yyyy' }}
+        </div>
+
+        <div>
+            <label><b> Team Supporters </b></label> {{ team.teamSupporters | number:'1.0-0' }}
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Close</button>
+    </div>
+</ng-template>

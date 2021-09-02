@@ -1,0 +1,89 @@
+<div class="col-md-6 offset-md-3">
+    <h3>{{ pageTitle }}</h3>
+    <form [formGroup]="crudForm" (ngSubmit)="onSubmit()" novalidate>
+
+        <div class="form-group">
+            <label for="name" class="marginTop">Football Team Name
+                <span class="text-danger"
+                    *ngIf="crudForm.get('teamName')?.errors && crudForm.get('teamName')?.hasError('required')">*</span>
+            </label>
+            <input id="teamName" type="text" class="form-control" formControlName="teamName" (change)="changeTeamName($event)"
+                [class.valid]="crudForm.get('teamName')?.valid && (crudForm.get('teamName')?.dirty || crudForm.get('teamName')?.touched)"
+                [class.invalid]="crudForm.get('teamName')?.invalid && (crudForm.get('teamName')?.dirty || crudForm.get('teamName')?.touched)" />
+        </div>
+        <div
+            *ngIf="crudForm.controls['teamName'].invalid && (crudForm.controls['teamName'].dirty || crudForm.controls['teamName'].touched)">
+            <small class="text-danger" *ngIf="crudForm.get('teamName')?.hasError('required')">
+                Football Team Name is required.
+            </small>
+            <small class="text-danger" *ngIf="crudForm.get('teamName')?.hasError('minlength')">
+                The minimum length for this field is 3 characters.
+            </small>
+        </div>
+        <div *ngIf="hasErrors">
+            <small class="text-danger">{{ errorMessage }}</small>
+        </div>
+
+        <div class="form-group">
+            <label for="stadium" class="marginTop">Team Stadium
+                <span class="text-danger"
+                    *ngIf="crudForm.get('teamStadium')?.errors && crudForm.get('teamStadium')?.hasError('required')">*</span>
+            </label>
+            <input type="text" class="form-control" id="teamStadium" name="teamStadium" data-placement="right"
+                title="Team Stadium" formControlName="teamStadium" [class.valid]="crudForm.get('teamStadium')?.valid && 
+                (crudForm.get('teamStadium')?.dirty || crudForm.get('teamStadium')?.touched)" [class.invalid]="crudForm.get('teamStadium')?.invalid && 
+                (crudForm.get('teamStadium')?.dirty || crudForm.get('teamStadium')?.touched)" />
+        </div>
+        <div
+            *ngIf="crudForm.controls['teamStadium'].invalid && (crudForm.controls['teamStadium'].dirty || crudForm.controls['teamStadium'].touched)">
+            <small class="text-danger" *ngIf="crudForm.get('teamStadium')?.hasError('required')">
+                Team Stadium is required.
+            </small>
+            <small class="text-danger" *ngIf="crudForm.get('teamStadium')?.hasError('minlength')">
+                The minimum length for this field is 3 characters.
+            </small>
+            <small class="text-danger" *ngIf="crudForm.get('teamStadium')?.hasError('errorValidation')">
+                {{ errorMessage }}
+            </small>
+        </div>
+
+        <div class="form-group">
+            <label for="foundation" class="marginTop">Team Foundation
+                <span class="text-danger"
+                    *ngIf="crudForm.get('teamFoundation')?.errors && crudForm.get('teamFoundation')?.hasError('required')">*</span>
+            </label>
+            <input type="date" class="form-control" id="teamFoundation" name="teamFoundation" data-placement="right"
+                title="Team Foundation" formControlName="teamFoundation" [class.valid]="crudForm.get('teamFoundation')?.valid && 
+                (crudForm.get('teamFoundation')?.dirty || crudForm.get('teamFoundation')?.touched)" [class.invalid]="crudForm.get('teamFoundation')?.invalid && 
+                (crudForm.get('teamFoundation')?.dirty || crudForm.get('teamFoundation')?.touched)" />
+        </div>
+        <div
+            *ngIf="crudForm.controls['teamFoundation'].invalid && (crudForm.controls['teamFoundation'].dirty || crudForm.controls['teamFoundation'].touched)">
+            <small class="text-danger" *ngIf="crudForm.get('teamFoundation')?.hasError('required')">
+                Team Foundation is required.
+            </small>
+        </div>
+
+        <div class="form-group">
+            <label for="supporters" class="marginTop">Team Supporters
+                <span class="text-danger"
+                    *ngIf="crudForm.get('teamSupporters')?.errors && crudForm.get('teamSupporters')?.hasError('required')">*</span>
+            </label>
+            <input type="text" class="form-control" id="teamSupporters" name="teamSupporters" data-placement="right"
+                title="Team Supporters" mask="separator.2" thousandSeparator="," separatorLimit="999999999"
+                formControlName="teamSupporters" [class.valid]="crudForm.get('teamSupporters')?.valid && 
+                (crudForm.get('teamSupporters')?.dirty || crudForm.get('teamSupporters')?.touched)" [class.invalid]="crudForm.get('teamSupporters')?.invalid && 
+                (crudForm.get('teamSupporters')?.dirty || crudForm.get('teamSupporters')?.touched)" />
+        </div>
+        <div
+            *ngIf="crudForm.controls['teamSupporters'].invalid && (crudForm.controls['teamSupporters'].dirty || crudForm.controls['teamSupporters'].touched)">
+            <small class="text-danger" *ngIf="crudForm.get('teamSupporters')?.hasError('required')">
+                Team Supporters is required.
+            </small>
+        </div>
+
+        <button type="submit" class="btn btn-success marginTop"
+            [disabled]="crudForm.pristine || crudForm.invalid">Submit</button>
+        <button type="button" class="btn btn-danger marginTop floatRight" (click)="goToTeamsList()">Back</button>
+    </form>
+</div>
