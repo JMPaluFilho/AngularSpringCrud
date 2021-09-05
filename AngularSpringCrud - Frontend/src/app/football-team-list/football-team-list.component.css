@@ -1,10 +1,33 @@
 .btnProperties {
-    margin: 5px;
-    width: 80px;
-    height: 38px;
+  margin: 5px;
+  width: 80px;
+  height: 38px;
 }
 
 .alignProperties {
-    vertical-align: middle;
-    text-align: center;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.header-normal {
+  width: 20%;
+  cursor: pointer;
+}
+
+.header-small {
+  width: 15%;
+  cursor: pointer;
+}
+
+.header-big {
+  width: 25%;
+}
+
+.disable-text-selection {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

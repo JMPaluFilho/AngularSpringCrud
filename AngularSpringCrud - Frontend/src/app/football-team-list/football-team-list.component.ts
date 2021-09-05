@@ -13,8 +13,11 @@ export class FootballTeamListComponent implements OnInit {
 
   teams!: FootballTeam[];
   team: FootballTeam = new FootballTeam();
+  headerTitle!: string;
+  showArrow = false;
+  isAsc = false;
 
-  constructor(private footballTeamService: FootballTeamService, 
+  constructor(private footballTeamService: FootballTeamService,
     private router: Router,
     private modalService: NgbModal) { }
 
@@ -32,7 +35,7 @@ export class FootballTeamListComponent implements OnInit {
     this.footballTeamService.deleteFootballTeam(id).subscribe(data => {
       this.getTeams();
     },
-    error => console.log(error));
+      error => console.log(error));
   }
 
   updateFootballTeam(id: number) {
@@ -43,9 +46,51 @@ export class FootballTeamListComponent implements OnInit {
     this.footballTeamService.getFootballTeamById(id).subscribe(data => {
       this.team = data;
     },
-    error => console.log(error));
+      error => console.log(error));
 
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {});
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => { });
+  }
+
+  sortByHeader(header: string) {
+    this.showArrow = true;
+    this.headerTitle = header;
+    this.isAsc = !this.isAsc;
+
+    switch (header) {
+      case 'name':
+        if (this.isAsc) {
+          this.teams = this.teams.sort((a, b) => a.teamName.localeCompare(b.teamName));
+        }
+        if (!this.isAsc) {
+          this.teams = this.teams.sort((a, b) => a.teamName.localeCompare(b.teamName)).reverse();
+        }
+        break;
+      case 'stadium':
+        if (this.isAsc) {
+          this.teams = this.teams.sort((a, b) => a.teamStadium.localeCompare(b.teamStadium));
+        }
+        if (!this.isAsc) {
+          this.teams = this.teams.sort((a, b) => a.teamStadium.localeCompare(b.teamStadium)).reverse();
+        }
+        break;
+      case 'foundation':
+        if (this.isAsc) {
+          this.teams = this.teams.sort((a, b) => a.teamFoundation.toString().localeCompare(b.teamFoundation.toString()));
+        }
+        if (!this.isAsc) {
+          this.teams = this.teams.sort((a, b) => a.teamFoundation.toString().localeCompare(b.teamFoundation.toString())).reverse();
+        }
+        break;
+      case 'supporters':
+        if (this.isAsc) {
+          this.teams = this.teams.sort((a, b) => a.teamSupporters - b.teamSupporters);
+        }
+        if (!this.isAsc) {
+          this.teams = this.teams.sort((a, b) => a.teamSupporters - b.teamSupporters).reverse();
+        }
+        break;
+      default: break;
+    }
   }
 
 }

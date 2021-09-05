@@ -1,56 +1,120 @@
 <table class="table table-striped alignProperties">
-    <thead>
-        <tr>
-            <th style="width: 20%;">Footbal Team Name</th>
-            <th style="width: 20%;">Team Stadium</th>
-            <th style="width: 15%;">Team Foundation</th>
-            <th style="width: 20%;">Team Supporters</th>
-            <th style="width: 25%;">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let team of teams">
-            <td>{{ team.teamName }}</td>
-            <td>{{ team.teamStadium }}</td>
-            <td>{{ team.teamFoundation | date:'dd/MM/yyyy' }}</td>
-            <td>{{ team.teamSupporters | number:'1.0-0' }}</td>
-            <td>
-                <button type="button" (click)="viewFootballTeam(team.teamId, viewModal)"
-                    class="btn btn-outline-info btnProperties">View</button>
-                <button type="button" (click)="updateFootballTeam(team.teamId)"
-                    class="btn btn-outline-primary btnProperties">Update</button>
-                <button type="button" (click)="deleteFootballTeam(team.teamId)"
-                    class="btn btn-danger btnProperties">Delete</button>
-            </td>
-        </tr>
-    </tbody>
+  <thead>
+    <tr>
+      <th class="header-normal disable-text-selection" (click)="sortByHeader('name')">Footbal Team Name
+        <i class="bi bi-arrow-up" *ngIf="showArrow && headerTitle == 'name' && isAsc">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+          </svg>
+        </i>
+        <i class="bi bi-arrow-down disable-text-selection" *ngIf="showArrow && headerTitle == 'name' && !isAsc">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z" />
+          </svg>
+        </i>
+      </th>
+
+      <th class="header-normal disable-text-selection" (click)="sortByHeader('stadium')">Team Stadium
+        <i class="bi bi-arrow-up" *ngIf="showArrow && headerTitle == 'stadium' && isAsc">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+          </svg>
+        </i>
+        <i class="bi bi-arrow-down disable-text-selection" *ngIf="showArrow && headerTitle == 'stadium' && !isAsc">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z" />
+          </svg>
+        </i>
+      </th>
+
+      <th class="header-small disable-text-selection" (click)="sortByHeader('foundation')">Team Foundation
+        <i class="bi bi-arrow-up" *ngIf="showArrow && headerTitle == 'foundation' && isAsc">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+          </svg>
+        </i>
+        <i class="bi bi-arrow-down disable-text-selection" *ngIf="showArrow && headerTitle == 'foundation' && !isAsc">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z" />
+          </svg>
+        </i>
+      </th>
+
+      <th class="header-normal disable-text-selection" (click)="sortByHeader('supporters')">Team Supporters
+        <i class="bi bi-arrow-up" *ngIf="showArrow && headerTitle == 'supporters' && isAsc">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+          </svg>
+        </i>
+        <i class="bi bi-arrow-down disable-text-selection" *ngIf="showArrow && headerTitle == 'supporters' && !isAsc">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down"
+            viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z" />
+          </svg>
+        </i>
+      </th>
+
+      <th class="header-big disable-text-selection">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let team of teams">
+      <td>{{ team.teamName }}</td>
+      <td>{{ team.teamStadium }}</td>
+      <td>{{ team.teamFoundation | date:'dd/MM/yyyy' }}</td>
+      <td>{{ team.teamSupporters | number:'1.0-0' }}</td>
+      <td>
+        <button type="button" (click)="viewFootballTeam(team.teamId, viewModal)"
+          class="btn btn-outline-info btnProperties">View</button>
+        <button type="button" (click)="updateFootballTeam(team.teamId)"
+          class="btn btn-outline-primary btnProperties">Update</button>
+        <button type="button" (click)="deleteFootballTeam(team.teamId)"
+          class="btn btn-danger btnProperties">Delete</button>
+      </td>
+    </tr>
+  </tbody>
 </table>
 
 <ng-template #viewModal let-modal>
-    <div class="modal-header">
-        <h4 class="modal-title" style="text-align: center">View Details</h4>
+  <div class="modal-header">
+    <h4 class="modal-title" style="text-align: center">View Details</h4>
+  </div>
+
+  <div class="modal-body">
+
+    <div>
+      <label><b> Football Team Name: </b></label> {{ team.teamName }}
     </div>
 
-    <div class="modal-body">
-
-        <div>
-            <label><b> Football Team Name: </b></label> {{ team.teamName }}
-        </div>
-
-        <div>
-            <label><b> Team Stadium: </b></label> {{ team.teamStadium }}
-        </div>
-
-        <div>
-            <label><b> Team Foundation: </b></label> {{ team.teamFoundation | date:'dd/MM/yyyy' }}
-        </div>
-
-        <div>
-            <label><b> Team Supporters </b></label> {{ team.teamSupporters | number:'1.0-0' }}
-        </div>
+    <div>
+      <label><b> Team Stadium: </b></label> {{ team.teamStadium }}
     </div>
 
-    <div class="modal-footer">
-        <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Close</button>
+    <div>
+      <label><b> Team Foundation: </b></label> {{ team.teamFoundation | date:'dd/MM/yyyy' }}
     </div>
+
+    <div>
+      <label><b> Team Supporters </b></label> {{ team.teamSupporters | number:'1.0-0' }}
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">Close</button>
+  </div>
 </ng-template>
