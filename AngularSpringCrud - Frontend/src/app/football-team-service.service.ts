@@ -24,6 +24,10 @@ export class FootballTeamService {
     return this.http.put(`${this.baseUrl}/updateTeam/${id}`, team);
   }
 
+  getPaginatedTeams(params: any): Observable<any> {
+    return this.http.get(`${this.baseUrl}/paginatedList`, { params });
+  }
+
   getAllFootballTeams(): Observable<FootballTeam[]> {
     return this.http.get<FootballTeam[]>(`${this.baseUrl}/teamList`);
   }

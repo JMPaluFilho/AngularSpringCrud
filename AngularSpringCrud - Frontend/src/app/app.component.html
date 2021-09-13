@@ -1,17 +1,22 @@
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-  <ul class="navbar-nav">
-    <li class="nav-item ">
-      <a routerLink="view-team" class="nav-link" routerLinkActive="active">View Football Teams</a>
-    </li>
-    <li class="nav-item">
-      <a routerLink="add-team" class="nav-link" routerLinkActive="active">Create Team</a>
-    </li>
-  </ul>
-</nav>
-<h1 class="text-center" class="titlePadding"> {{ title }} </h1>
-<div class="container">
-  <router-outlet></router-outlet>
+<div id="wrap">
+  <div id="main">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <ul class="navbar-nav">
+        <li class="nav-item ">
+          <a routerLink="view-team" class="nav-link" routerLinkActive="active">View Football Teams</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="add-team" class="nav-link" routerLinkActive="active">Create Team</a>
+        </li>
+      </ul>
+    </nav>
+    <h1 class="text-center" class="titlePadding"> {{ title }} </h1>
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
 </div>
+
 <footer class="footer">
   <div class="container">
     <span>Angular + Spring Boot CRUD Example</span>

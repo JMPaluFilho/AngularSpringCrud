@@ -3,6 +3,7 @@ import { FootballTeamService } from '../football-team-service.service';
 import { FootballTeam } from '../football-team';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-football-team-list',
@@ -16,26 +17,83 @@ export class FootballTeamListComponent implements OnInit {
   headerTitle!: string;
   showArrow = false;
   isAsc = false;
+  searchTeam = '';
+  page = 0;
+  count = 0;
+  pageSize = 3;
+  pageSizes = [3, 6, 9];
 
   constructor(private footballTeamService: FootballTeamService,
     private router: Router,
     private modalService: NgbModal) { }
 
   ngOnInit(): void {
-    this.getTeams();
+    this.getPaginatedTeams();
   }
 
-  getTeams() {
-    this.footballTeamService.getAllFootballTeams().subscribe(data => {
-      this.teams = data.sort((a, b) => a.teamSupporters - b.teamSupporters).reverse();
+  getPaginatedTeams() {
+    const params = this.getRequestParams(this.searchTeam, this.page, this.pageSize);
+
+    this.footballTeamService.getPaginatedTeams(params).subscribe(data => {
+      this.teams = data.content.sort((a: any, b: any) => a.teamSupporters - b.teamSupporters).reverse();
+      this.count = data.totalElements;
     });
   }
 
-  deleteFootballTeam(id: number) {
-    this.footballTeamService.deleteFootballTeam(id).subscribe(data => {
-      this.getTeams();
+  nextPage(event: PageEvent) {
+    this.page = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.getPaginatedTeams();
+  }
+
+  getRequestParams(searchTeam: any, page: any, pageSize: any) {
+    let params: { [key: string]: any } = {};
+
+    if (searchTeam) {
+      params[`searchTeam`] = searchTeam;
+    }
+
+    if (page) {
+      params[`page`] = page;
+    } else {
+      params[`page`] = 0;
+    }
+
+    if (pageSize) {
+      params[`pageSize`] = pageSize;
+    } else {
+      params[`pageSize`] = 3;
+    }
+
+    return params;
+  }
+
+  handlePageChange(event: any) {
+    this.page = event;
+    this.getPaginatedTeams();
+  }
+
+  handlePageSizeChange(event: any) {
+    this.pageSize = event.target.value;
+    this.page = 1;
+    this.getPaginatedTeams();
+  }
+
+  deleteFootballTeam(id: number, content: any) {
+    this.footballTeamService.getFootballTeamById(id).subscribe(data => {
+      this.team = data;
     },
-      error => console.log(error));
+      error => console.log(error)
+    );
+
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      if (result == "delete") {
+        this.footballTeamService.deleteFootballTeam(id).subscribe(data => {
+          this.getPaginatedTeams();
+        },
+          error => console.log(error));
+      }
+    });
   }
 
   updateFootballTeam(id: number) {
@@ -46,7 +104,8 @@ export class FootballTeamListComponent implements OnInit {
     this.footballTeamService.getFootballTeamById(id).subscribe(data => {
       this.team = data;
     },
-      error => console.log(error));
+      error => console.log(error)
+    );
 
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => { });
   }

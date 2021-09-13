@@ -3,6 +3,10 @@ package br.com.angularspringcrud.service;
 import br.com.angularspringcrud.repository.FootballTeamRepository;
 import br.com.angularspringcrud.model.FootballTeam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,5 +47,11 @@ public class FootballTeamServiceImpl implements FootballTeamService {
     @Override
     public Optional<FootballTeam> getFootballTeamById(long teamId) {
         return footballTeamRepository.findById(teamId);
+    }
+
+    @Override
+    public Page<FootballTeam> getPaginatedTeams(int page, int pageSize) {
+        return footballTeamRepository.findAll(
+                PageRequest.of(page, pageSize, Sort.Direction.DESC, "teamSupporters"));
     }
 }

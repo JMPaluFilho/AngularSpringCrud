@@ -1,6 +1,7 @@
 package br.com.angularspringcrud.service;
 
 import br.com.angularspringcrud.model.FootballTeam;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,5 +18,6 @@ public interface FootballTeamService {
 
     Optional<FootballTeam> getFootballTeamById(long teamId);
 
+    Page<FootballTeam> getPaginatedTeams(int page, int pageSize);
 
 }

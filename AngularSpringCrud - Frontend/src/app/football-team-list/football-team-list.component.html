@@ -1,53 +1,72 @@
+<!-- <div class="list row">
+  <div class="col-md-8">
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="Search by name" [(ngModel)]="searchTeam" />
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" (click)="getPaginatedTeams()">
+          Search
+        </button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
 <table class="table table-striped alignProperties">
   <thead>
-    <tr>
-      <th class="header-normal disable-text-selection" (click)="sortByHeader('name')">Footbal Team Name
+    <tr class="mat-header-row">
+      <th class="header-normal disable-text-selection mat-header-cell" (click)="sortByHeader('name')">Footbal Team
+        Name
         <img src="../assets/svg/arrow-up.svg" *ngIf="showArrow && headerTitle == 'name' && isAsc" title="Ascending" />
         <img src="../assets/svg/arrow-down.svg" *ngIf="showArrow && headerTitle == 'name' && !isAsc"
           title="Descending" />
       </th>
 
-      <th class="header-normal disable-text-selection" (click)="sortByHeader('stadium')">Team Stadium
+      <th class="header-normal disable-text-selection mat-header-cell" (click)="sortByHeader('stadium')">Team Stadium
         <img src="../assets/svg/arrow-up.svg" *ngIf="showArrow && headerTitle == 'stadium' && isAsc"
           title="Ascending" />
         <img src="../assets/svg/arrow-down.svg" *ngIf="showArrow && headerTitle == 'stadium' && !isAsc"
           title="Descending" />
       </th>
 
-      <th class="header-normal disable-text-selection" (click)="sortByHeader('foundation')">Team Foundation
+      <th class="header-normal disable-text-selection mat-header-cell" (click)="sortByHeader('foundation')">Team
+        Foundation
         <img src="../assets/svg/arrow-up.svg" *ngIf="showArrow && headerTitle == 'foundation' && isAsc"
           title="Ascending" />
         <img src="../assets/svg/arrow-down.svg" *ngIf="showArrow && headerTitle == 'foundation' && !isAsc"
           title="Descending" />
       </th>
 
-      <th class="header-normal disable-text-selection" (click)="sortByHeader('supporters')">Team Supporters
+      <th class="header-normal disable-text-selection mat-header-cell" (click)="sortByHeader('supporters')">Team
+        Supporters
         <img src="../assets/svg/arrow-up.svg" *ngIf="showArrow && headerTitle == 'supporters' && isAsc"
           title="Ascending" />
         <img src="../assets/svg/arrow-down.svg" *ngIf="showArrow && headerTitle == 'supporters' && !isAsc"
           title="Descending" />
       </th>
 
-      <th class="header-actions disable-text-selection">Actions</th>
+      <th class="header-actions disable-text-selection mat-header-cell">Actions</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let team of teams">
-      <td>{{ team.teamName }}</td>
-      <td>{{ team.teamStadium }}</td>
-      <td>{{ team.teamFoundation | date:'dd/MM/yyyy' }}</td>
-      <td>{{ team.teamSupporters | number:'1.0-0' }}</td>
-      <td>
+    <tr class="mat-row" *ngFor="let team of teams">
+      <td class="mat-cell">{{ team.teamName }}</td>
+      <td class="mat-cell">{{ team.teamStadium }}</td>
+      <td class="mat-cell">{{ team.teamFoundation | date:'dd/MM/yyyy' }}</td>
+      <td class="mat-cell">{{ team.teamSupporters | number:'1.0-0' }}</td>
+      <td class="mat-cell">
         <img src="../assets/svg/eye.svg" class="icon-actions" (click)="viewFootballTeam(team.teamId, viewModal)"
           title="Details" />
         <img src="../assets/svg/pencil.svg" class="icon-actions" (click)="updateFootballTeam(team.teamId)"
           title="Edit" />
-        <img src="../assets/svg/trash.svg" class="icon-actions" (click)="deleteFootballTeam(team.teamId)"
+        <img src="../assets/svg/trash.svg" class="icon-actions" (click)="deleteFootballTeam(team.teamId, deleteModal)"
           title="Delete" />
       </td>
     </tr>
   </tbody>
 </table>
+
+<mat-paginator [pageSizeOptions]="pageSizes" [pageSize]="pageSize" [length]="count" (page)="nextPage($event)">
+</mat-paginator>
 
 <ng-template #viewModal let-modal>
   <div class="modal-header">
@@ -74,6 +93,23 @@
   </div>
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="modal.close('Close click')">Close</button>
+    <button type="button" class="btn btn-danger" (click)="modal.close('Close click')" tabindex="-1">Close</button>
+  </div>
+</ng-template>
+
+<ng-template #deleteModal let-deleteModal>
+  <div class="modal-header">
+    <h4 class="modal-title" style="text-align: center">Confirm Delete</h4>
+  </div>
+
+  <div class="modal-body">
+    <div>
+      Are you sure you want to delete {{ team.teamName }} ?
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" (click)="deleteModal.close('delete')" tabindex="-1">Delete</button>
+      <button type="button" class="btn btn-primary" (click)="deleteModal.close('cancel')" tabindex="-1">Cancel</button>
+    </div>
   </div>
 </ng-template>

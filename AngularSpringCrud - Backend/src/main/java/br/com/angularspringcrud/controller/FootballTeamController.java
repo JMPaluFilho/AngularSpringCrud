@@ -4,6 +4,7 @@ import br.com.angularspringcrud.exception.ResourceNotFoundException;
 import br.com.angularspringcrud.model.FootballTeam;
 import br.com.angularspringcrud.service.FootballTeamService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +47,21 @@ public class FootballTeamController {
         updatedTeam = footballTeamService.saveFootballTeam(updatedTeam);
 
         return ResponseEntity.ok(updatedTeam);
+    }
+
+    @RequestMapping(
+            value = "/paginatedList",
+            params = {"page", "pageSize"},
+            method = RequestMethod.GET)
+    public ResponseEntity<Page<FootballTeam>> getPaginatedTeams(@RequestParam("page") int page,
+                                                @RequestParam("pageSize") int pageSize) {
+        Page<FootballTeam> resultPage = footballTeamService.getPaginatedTeams(page, pageSize);
+
+        if (page > resultPage.getTotalPages()) {
+            throw new ResourceNotFoundException("Page is bigger than total pages");
+        }
+
+        return ResponseEntity.ok(resultPage);
     }
 
     @GetMapping("/teamList")
