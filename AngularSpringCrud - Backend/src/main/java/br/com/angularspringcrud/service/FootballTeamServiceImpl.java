@@ -54,4 +54,9 @@ public class FootballTeamServiceImpl implements FootballTeamService {
         return footballTeamRepository.findAll(
                 PageRequest.of(page, pageSize, Sort.Direction.DESC, "teamSupporters"));
     }
+
+    @Override
+    public Optional<FootballTeam> getFootballTeamByName(String teamName) {
+        return footballTeamRepository.findByTeamName(teamName);
+    }
 }

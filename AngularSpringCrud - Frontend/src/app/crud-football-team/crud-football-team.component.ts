@@ -78,7 +78,7 @@ export class CrudFootballTeamComponent implements OnInit {
   }
 
   goToTeamsList() {
-    this.router.navigate(['/view-team'])
+    this.router.navigate(['/list'])
   }
 
   onEditSubmit() {

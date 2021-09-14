@@ -11,23 +11,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/teams")
 public class FootballTeamController {
 
     @Autowired
     private FootballTeamService footballTeamService;
 
-    @PostMapping("/createTeam")
+    @PostMapping("/create")
     public ResponseEntity<FootballTeam> createFootballTeam(@RequestBody FootballTeam footballTeam) {
         FootballTeam team = footballTeamService.saveFootballTeam(footballTeam);
 
         return ResponseEntity.ok(team);
     }
 
-    @DeleteMapping("/deleteTeam/{teamId}")
+    @DeleteMapping("/delete/{teamId}")
     public ResponseEntity<Map<String, Boolean>> deleteFootballTeam(@PathVariable("teamId") long teamId) {
         FootballTeam databaseTeam = footballTeamService.getFootballTeamById(teamId)
                 .orElseThrow(() -> new ResourceNotFoundException("Football Team not exist with id: " + teamId));
@@ -38,7 +39,7 @@ public class FootballTeamController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/updateTeam/{teamId}")
+    @PutMapping("/update/{teamId}")
     public ResponseEntity<FootballTeam> updateFootballTeam(@PathVariable("teamId") long teamId,
                                                            @RequestBody FootballTeam screenTeam) {
         FootballTeam databaseTeam = footballTeamService.getFootballTeamById(teamId)
@@ -50,7 +51,7 @@ public class FootballTeamController {
     }
 
     @RequestMapping(
-            value = "/paginatedList",
+            value = "/list",
             params = {"page", "pageSize"},
             method = RequestMethod.GET)
     public ResponseEntity<Page<FootballTeam>> getPaginatedTeams(@RequestParam("page") int page,
@@ -64,17 +65,25 @@ public class FootballTeamController {
         return ResponseEntity.ok(resultPage);
     }
 
-    @GetMapping("/teamList")
+    @GetMapping("/list")
     public ResponseEntity<List<FootballTeam>> getAllFootballTeams() {
         List<FootballTeam> footballTeamList = footballTeamService.getAllFootballTeams();
 
         return ResponseEntity.ok(footballTeamList);
     }
 
-    @GetMapping("/team/{teamId}")
+    @GetMapping("/{teamId}")
     public ResponseEntity<FootballTeam> getFootballTeamById(@PathVariable("teamId") long teamId) {
         FootballTeam footballTeam = footballTeamService.getFootballTeamById(teamId)
                 .orElseThrow(() -> new ResourceNotFoundException("Football Team not exist with id: " + teamId));
+
+        return ResponseEntity.ok(footballTeam);
+    }
+
+    @GetMapping("/search/{teamName}")
+    public ResponseEntity<FootballTeam> getFootballTeamByName(@PathVariable("teamName") String teamName) {
+        FootballTeam footballTeam = footballTeamService.getFootballTeamByName(teamName)
+                .orElseThrow(() -> new ResourceNotFoundException("Football Team not exist with name: " + teamName));
 
         return ResponseEntity.ok(footballTeam);
     }

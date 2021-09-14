@@ -8,32 +8,36 @@ import { FootballTeam } from './football-team';
 })
 export class FootballTeamService {
 
-  private baseUrl = 'http://localhost:8080/api';
+  private baseUrl = 'http://localhost:8080/api/teams';
 
   constructor(private http: HttpClient) { }
 
   createFootballTeam(footballTeam: FootballTeam): Observable<Object> {
-    return this.http.post(`${this.baseUrl}/createTeam`, footballTeam);
+    return this.http.post(`${this.baseUrl}/create`, footballTeam);
   }
 
   deleteFootballTeam(id: number): Observable<Object> {
-    return this.http.delete(`${this.baseUrl}/deleteTeam/${id}`);
+    return this.http.delete(`${this.baseUrl}/delete/${id}`);
   }
 
   updateFootballTeam(id: number, team: FootballTeam): Observable<Object> {
-    return this.http.put(`${this.baseUrl}/updateTeam/${id}`, team);
+    return this.http.put(`${this.baseUrl}/update/${id}`, team);
   }
 
   getPaginatedTeams(params: any): Observable<any> {
-    return this.http.get(`${this.baseUrl}/paginatedList`, { params });
+    return this.http.get(`${this.baseUrl}/list`, { params });
   }
 
   getAllFootballTeams(): Observable<FootballTeam[]> {
-    return this.http.get<FootballTeam[]>(`${this.baseUrl}/teamList`);
+    return this.http.get<FootballTeam[]>(`${this.baseUrl}/list`);
   }
 
   getFootballTeamById(id: number): Observable<FootballTeam> {
-    return this.http.get<FootballTeam>(`${this.baseUrl}/team/${id}`);
+    return this.http.get<FootballTeam>(`${this.baseUrl}/${id}`);
+  }
+
+  getFootballTeamByName(name: any): Observable<FootballTeam> {
+    return this.http.get<FootballTeam>(`${this.baseUrl}/search/${name}`);
   }
 
 }

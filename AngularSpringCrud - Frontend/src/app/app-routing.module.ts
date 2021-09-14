@@ -4,10 +4,10 @@ import { CrudFootballTeamComponent } from './crud-football-team/crud-football-te
 import { FootballTeamListComponent } from './football-team-list/football-team-list.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'view-team', pathMatch: 'full' },
-  { path: 'view-team', component: FootballTeamListComponent },
-  { path: 'add-team', component: CrudFootballTeamComponent },
-  { path: 'update-team/:id', component: CrudFootballTeamComponent }
+  { path: '', redirectTo: 'list', pathMatch: 'full' },
+  { path: 'list', component: FootballTeamListComponent },
+  { path: 'create', component: CrudFootballTeamComponent },
+  { path: 'update/:id', component: CrudFootballTeamComponent }
 ];
 
 @NgModule({

@@ -4,6 +4,7 @@ import { FootballTeam } from '../football-team';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PageEvent } from '@angular/material/paginator';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-football-team-list',
@@ -13,10 +14,15 @@ import { PageEvent } from '@angular/material/paginator';
 export class FootballTeamListComponent implements OnInit {
 
   teams!: FootballTeam[];
+  selectedTeams!: FootballTeam[];
   team: FootballTeam = new FootballTeam();
   headerTitle!: string;
+  masterSelected = false;
+  isDeleteSelected = false;
   showArrow = false;
   isAsc = false;
+  showError = false;
+  errorMessage = '';
   searchTeam = '';
   page = 0;
   count = 0;
@@ -33,11 +39,44 @@ export class FootballTeamListComponent implements OnInit {
 
   getPaginatedTeams() {
     const params = this.getRequestParams(this.searchTeam, this.page, this.pageSize);
+    this.showError = false;
+    this.errorMessage = '';
+    this.masterSelected = false;
 
-    this.footballTeamService.getPaginatedTeams(params).subscribe(data => {
-      this.teams = data.content.sort((a: any, b: any) => a.teamSupporters - b.teamSupporters).reverse();
-      this.count = data.totalElements;
-    });
+    this.footballTeamService.getPaginatedTeams(params).pipe(map((response) => {
+      this.teams = response.content.sort((a: any, b: any) => a.teamSupporters - b.teamSupporters).reverse();
+      this.teams.forEach(element => {
+        element.selected = false;
+      });
+      this.count = response.totalElements;
+    })).subscribe(data => {
+      this.getCheckedItemList();
+    },
+      error => console.log(error)
+    );
+  }
+
+  getCheckedItemList() {
+    this.selectedTeams = [];
+    for (var i = 0; i < this.teams.length; i++) {
+      if (this.teams[i].selected) {
+        this.selectedTeams.push(this.teams[i]);
+      }
+    }
+  }
+
+  checkUncheckAll() {
+    for (var i = 0; i < this.teams.length; i++) {
+      this.teams[i].selected = this.masterSelected;
+    }
+    this.getCheckedItemList();
+  }
+
+  isAllSelected() {
+    this.masterSelected = this.teams.every(function (item: any) {
+      return item.selected == true;
+    })
+    this.getCheckedItemList();
   }
 
   nextPage(event: PageEvent) {
@@ -79,7 +118,49 @@ export class FootballTeamListComponent implements OnInit {
     this.getPaginatedTeams();
   }
 
+  searchByName() {
+    this.footballTeamService.getFootballTeamByName(this.searchTeam).subscribe(data => {
+      console.log(data);
+      this.teams = [];
+      this.teams.push(data);
+      this.showError = false;
+      this.errorMessage = '';
+    },
+      error => {
+        console.log(error);
+        this.showError = true;
+        this.errorMessage = 'Football Team not exist with name: ' + this.searchTeam;
+      }
+    );
+  }
+
+  clearSearch() {
+    this.searchTeam = '';
+    this.getPaginatedTeams();
+  }
+
+  deleteSelected(content: any) {
+    let index = 0;
+    this.isDeleteSelected = true;
+
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      if (result == "delete") {
+        this.selectedTeams.forEach(element => {
+          this.footballTeamService.deleteFootballTeam(element.teamId).pipe(map((response) => {
+            index++;
+          })).subscribe(data => {
+            if (index == this.selectedTeams.length) {
+              this.getPaginatedTeams();
+            }
+          },
+            error => console.log(error));
+        });
+      }
+    });
+  }
+
   deleteFootballTeam(id: number, content: any) {
+    this.isDeleteSelected = false;
     this.footballTeamService.getFootballTeamById(id).subscribe(data => {
       this.team = data;
     },
@@ -97,7 +178,7 @@ export class FootballTeamListComponent implements OnInit {
   }
 
   updateFootballTeam(id: number) {
-    this.router.navigate(['update-team', id]);
+    this.router.navigate(['update', id]);
   }
 
   viewFootballTeam(id: number, content: any) {

@@ -15,7 +15,11 @@
 }
 
 .header-actions {
-  width: 20%;
+  width: 18%;
+}
+
+.header-checkboxes {
+  width: 2%;
 }
 
 .icon-actions {
@@ -33,4 +37,26 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.marginLeft {
+  margin-left: 20px;
+}
+
+.padding {
+  padding: 40px;
+}
+
+.header {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.btnWidth {
+  width: 80px;
+}
+
+.delete-btn {
+  width: 140px;
+  height: 38px;
 }

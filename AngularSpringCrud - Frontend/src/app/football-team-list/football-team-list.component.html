@@ -1,54 +1,71 @@
-<!-- <div class="list row">
+<div class="d-flex justify-content-center padding">
   <div class="col-md-8">
     <div class="input-group mb-3">
       <input type="text" class="form-control" placeholder="Search by name" [(ngModel)]="searchTeam" />
       <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button" (click)="getPaginatedTeams()">
+        <button class="btn btn-outline-secondary marginLeft btnWidth" type="button" (click)="searchByName()">
           Search
         </button>
+        <button class="btn btn-outline-danger marginLeft btnWidth" type="button" (click)="clearSearch()">
+          Clear</button>
       </div>
     </div>
+    <small class="text-danger" *ngIf="showError"> {{ errorMessage }}</small>
   </div>
-</div> -->
+</div>
 
 <table class="table table-striped alignProperties">
   <thead>
     <tr class="mat-header-row">
-      <th class="header-normal disable-text-selection mat-header-cell" (click)="sortByHeader('name')">Footbal Team
-        Name
+      <th class="header-checkboxes disable-text-selection mat-header-cell header">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" (change)="checkUncheckAll()"
+            [(ngModel)]="masterSelected">
+        </div>
+      </th>
+
+      <th class="header-normal disable-text-selection mat-header-cell header" (click)="sortByHeader('name')">
+        Footbal Team Name
         <img src="../assets/svg/arrow-up.svg" *ngIf="showArrow && headerTitle == 'name' && isAsc" title="Ascending" />
         <img src="../assets/svg/arrow-down.svg" *ngIf="showArrow && headerTitle == 'name' && !isAsc"
           title="Descending" />
       </th>
 
-      <th class="header-normal disable-text-selection mat-header-cell" (click)="sortByHeader('stadium')">Team Stadium
+      <th class="header-normal disable-text-selection mat-header-cell header" (click)="sortByHeader('stadium')">
+        Team Stadium
         <img src="../assets/svg/arrow-up.svg" *ngIf="showArrow && headerTitle == 'stadium' && isAsc"
           title="Ascending" />
         <img src="../assets/svg/arrow-down.svg" *ngIf="showArrow && headerTitle == 'stadium' && !isAsc"
           title="Descending" />
       </th>
 
-      <th class="header-normal disable-text-selection mat-header-cell" (click)="sortByHeader('foundation')">Team
-        Foundation
+      <th class="header-normal disable-text-selection mat-header-cell header" (click)="sortByHeader('foundation')">
+        Team Foundation
         <img src="../assets/svg/arrow-up.svg" *ngIf="showArrow && headerTitle == 'foundation' && isAsc"
           title="Ascending" />
         <img src="../assets/svg/arrow-down.svg" *ngIf="showArrow && headerTitle == 'foundation' && !isAsc"
           title="Descending" />
       </th>
 
-      <th class="header-normal disable-text-selection mat-header-cell" (click)="sortByHeader('supporters')">Team
-        Supporters
+      <th class="header-normal disable-text-selection mat-header-cell header" (click)="sortByHeader('supporters')">
+        Team Supporters
         <img src="../assets/svg/arrow-up.svg" *ngIf="showArrow && headerTitle == 'supporters' && isAsc"
           title="Ascending" />
         <img src="../assets/svg/arrow-down.svg" *ngIf="showArrow && headerTitle == 'supporters' && !isAsc"
           title="Descending" />
       </th>
 
-      <th class="header-actions disable-text-selection mat-header-cell">Actions</th>
+      <th class="header-actions disable-text-selection mat-header-cell header">Actions</th>
     </tr>
   </thead>
   <tbody>
     <tr class="mat-row" *ngFor="let team of teams">
+      <td class="mat-cell">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" (change)="isAllSelected()"
+            [checked]="team.selected" [(ngModel)]="team.selected">
+        </div>
+      </td>
       <td class="mat-cell">{{ team.teamName }}</td>
       <td class="mat-cell">{{ team.teamStadium }}</td>
       <td class="mat-cell">{{ team.teamFoundation | date:'dd/MM/yyyy' }}</td>
@@ -65,8 +82,14 @@
   </tbody>
 </table>
 
-<mat-paginator [pageSizeOptions]="pageSizes" [pageSize]="pageSize" [length]="count" (page)="nextPage($event)">
-</mat-paginator>
+<div class="d-flex justify-content-between">
+  <button class="btn btn-outline-danger delete-btn" type="button" (click)="deleteSelected(deleteModal)"
+    [disabled]="!(selectedTeams.length > 0)">
+    Delete Selected
+  </button>
+  <mat-paginator [pageSizeOptions]="pageSizes" [pageSize]="pageSize" [length]="count" (page)="nextPage($event)">
+  </mat-paginator>
+</div>
 
 <ng-template #viewModal let-modal>
   <div class="modal-header">
@@ -103,8 +126,12 @@
   </div>
 
   <div class="modal-body">
-    <div>
+    <div *ngIf="!isDeleteSelected">
       Are you sure you want to delete {{ team.teamName }} ?
+    </div>
+
+    <div *ngIf="isDeleteSelected">
+      Are you sure you want to delete all selected items ?
     </div>
 
     <div class="modal-footer">

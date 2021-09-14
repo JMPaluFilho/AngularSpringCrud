@@ -20,4 +20,6 @@ public interface FootballTeamService {
 
     Page<FootballTeam> getPaginatedTeams(int page, int pageSize);
 
+    Optional<FootballTeam> getFootballTeamByName(String teamName);
+
 }
