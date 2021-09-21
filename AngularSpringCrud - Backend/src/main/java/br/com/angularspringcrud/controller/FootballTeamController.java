@@ -50,9 +50,8 @@ public class FootballTeamController {
                                                 @RequestParam("pageSize") int pageSize) {
         Page<FootballTeam> resultPage = footballTeamService.getPaginatedTeams(page, pageSize);
 
-        if (page > resultPage.getTotalPages()) {
+        if (page > resultPage.getTotalPages())
             throw new ResourceNotFoundException("Page is bigger than total pages");
-        }
 
         return ResponseEntity.ok(resultPage);
     }
