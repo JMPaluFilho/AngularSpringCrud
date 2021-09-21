@@ -8,10 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -23,20 +20,16 @@ public class FootballTeamController {
 
     @PostMapping("/create")
     public ResponseEntity<FootballTeam> createFootballTeam(@RequestBody FootballTeam footballTeam) {
-        FootballTeam team = footballTeamService.saveFootballTeam(footballTeam);
-
-        return ResponseEntity.ok(team);
+        return ResponseEntity.ok(footballTeamService.saveFootballTeam(footballTeam));
     }
 
     @DeleteMapping("/delete/{teamId}")
-    public ResponseEntity<Map<String, Boolean>> deleteFootballTeam(@PathVariable("teamId") long teamId) {
+    public ResponseEntity<FootballTeam> deleteFootballTeam(@PathVariable("teamId") long teamId) {
         FootballTeam databaseTeam = footballTeamService.getFootballTeamById(teamId)
                 .orElseThrow(() -> new ResourceNotFoundException("Football Team not exist with id: " + teamId));
         footballTeamService.deleteFootballTeam(databaseTeam);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(databaseTeam);
     }
 
     @PutMapping("/update/{teamId}")
@@ -45,9 +38,8 @@ public class FootballTeamController {
         FootballTeam databaseTeam = footballTeamService.getFootballTeamById(teamId)
                 .orElseThrow(() -> new ResourceNotFoundException("Football Team not exist with id: " + teamId));
         FootballTeam updatedTeam = footballTeamService.updateFootballTeam(databaseTeam, screenTeam);
-        updatedTeam = footballTeamService.saveFootballTeam(updatedTeam);
 
-        return ResponseEntity.ok(updatedTeam);
+        return ResponseEntity.ok(footballTeamService.saveFootballTeam(updatedTeam));
     }
 
     @RequestMapping(
@@ -67,24 +59,18 @@ public class FootballTeamController {
 
     @GetMapping("/list")
     public ResponseEntity<List<FootballTeam>> getAllFootballTeams() {
-        List<FootballTeam> footballTeamList = footballTeamService.getAllFootballTeams();
-
-        return ResponseEntity.ok(footballTeamList);
+        return ResponseEntity.ok(footballTeamService.getAllFootballTeams());
     }
 
     @GetMapping("/{teamId}")
     public ResponseEntity<FootballTeam> getFootballTeamById(@PathVariable("teamId") long teamId) {
-        FootballTeam footballTeam = footballTeamService.getFootballTeamById(teamId)
-                .orElseThrow(() -> new ResourceNotFoundException("Football Team not exist with id: " + teamId));
-
-        return ResponseEntity.ok(footballTeam);
+        return ResponseEntity.ok(footballTeamService.getFootballTeamById(teamId)
+                .orElseThrow(() -> new ResourceNotFoundException("Football Team not exist with id: " + teamId)));
     }
 
     @GetMapping("/search/{teamName}")
     public ResponseEntity<FootballTeam> getFootballTeamByName(@PathVariable("teamName") String teamName) {
-        FootballTeam footballTeam = footballTeamService.getFootballTeamByName(teamName)
-                .orElseThrow(() -> new ResourceNotFoundException("Football Team not exist with name: " + teamName));
-
-        return ResponseEntity.ok(footballTeam);
+        return ResponseEntity.ok(footballTeamService.getFootballTeamByName(teamName)
+                .orElseThrow(() -> new ResourceNotFoundException("Football Team not exist with name: " + teamName)));
     }
 }
